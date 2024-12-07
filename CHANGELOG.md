@@ -147,6 +147,23 @@ All notable changes to this project will be documented in this file.
 - Improved installation instructions
 - Enhanced security documentation
 
+## [2024-12-07] Sandbox Configuration Improvements
+
+### Added
+- Windows test folder mapping for improved sandbox initialization
+- UNC path support for non-system drive mappings
+- Standardized folder mapping structure in .wsb configuration
+
+### Fixed
+- Resolved configuration issues with direct drive path mappings
+- Fixed sandbox initialization errors by maintaining consistent folder mapping order
+- Improved folder mapping reliability using UNC paths
+
+### Changed
+- Updated all non-system drive mappings to use UNC format (\\localhost\D$\...)
+- Standardized folder mapping permissions (read-only vs read-write)
+- Enhanced logon command to set initial working directory
+
 ## Technical Details
 
 ### Path Structure Changes

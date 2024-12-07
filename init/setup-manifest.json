@@ -1,0 +1,156 @@
+{
+    "sandboxConfig": {
+        "memoryInMB": 8192,
+        "vGPU": "Enable",
+        "networking": "Enable",
+        "executionPolicy": "Bypass",
+        "readOnlyMappings": true,
+        "readWriteMappings": false
+    },
+    "environment": {
+        "base": {
+            "userProfile": "%USERPROFILE%",
+            "programFiles": "C:\\Program Files",
+            "programFilesX86": "C:\\Program Files (x86)",
+            "localAppData": "%LOCALAPPDATA%",
+            "appData": "%APPDATA%"
+        },
+        "sandbox": {
+            "root": "%USERPROFILE%\\.pwsh\\sandbox",
+            "env": "%USERPROFILE%\\Environments\\PSProfile",
+            "packages": "C:\\Packages",
+            "scripts": "%USERPROFILE%\\.pwsh\\sandbox\\scripts",
+            "setup": "%USERPROFILE%\\Environments\\PSProfile\\Setup",
+            "dev": {
+                "root": "%USERPROFILE%\\Environments\\PSProfile\\DevCode",
+                "src": "%USERPROFILE%\\Environments\\PSProfile\\DevCode\\src",
+                "profile": "%USERPROFILE%\\Environments\\PSProfile\\ProfileRef",
+                "vscode": {
+                    "root": "%USERPROFILE%\\Environments\\PSProfile\\DevCode\\.vscode",
+                    "settings": "%USERPROFILE%\\Environments\\PSProfile\\DevCode\\.vscode\\settings.json"
+                }
+            }
+        }
+    },
+    "userProfiles": {
+        "admin": "ContainerAdministrator",
+        "user": "ContainerUser",
+        "public": "Public"
+    },
+    "paths": {
+        "programFiles": {
+            "x64": "C:\\Program Files",
+            "x86": "C:\\Program Files (x86)"
+        },
+        "packages": {
+            "root": "C:\\Packages",
+            "task": {
+                "type": "direct",
+                "path": "C:\\Packages\\tools\\task\\task_windows_amd64.exe",
+                "version": "3.34.1"
+            },
+            "dotnetTools": {
+                "type": "dotnet-tool",
+                "tools": {
+                    "coverlet": {
+                        "name": "coverlet.console",
+                        "version": "6.0.0"
+                    },
+                    "reportgenerator": {
+                        "name": "dotnet-reportgenerator-globaltool",
+                        "version": "5.2.0"
+                    }
+                }
+            },
+            "git": {
+                "type": "self-extracting",
+                "installer": "C:\\Packages\\git\\PortableGit-64-bit.7z.exe",
+                "version": "2.43.0",
+                "silent": "/SILENT",
+                "config": {
+                    "core.autocrlf": "true",
+                    "init.defaultBranch": "main"
+                }
+            },
+            "powershell": {
+                "type": "archive",
+                "installer": "C:\\Packages\\powershell\\PowerShell-7.4.0-win-x64.zip",
+                "version": "7.4.0",
+                "modules": {
+                    "Pester": {
+                        "version": "5.5.0",
+                        "repository": "PSGallery"
+                    },
+                    "platyPS": {
+                        "version": "0.14.2",
+                        "repository": "PSGallery"
+                    },
+                    "PSScriptAnalyzer": {
+                        "version": "1.21.0",
+                        "repository": "PSGallery"
+                    }
+                }
+            },
+            "vscode": {
+                "type": "archive",
+                "installer": "C:\\Packages\\vscode\\VSCode-win32-x64-1.90.1.zip",
+                "version": "1.90.1",
+                "extensions": {
+                    "powershell-preview": {
+                        "publisher": "ms-vscode",
+                        "name": "PowerShell-Preview",
+                        "version": "2023.12.0"
+                    },
+                    "cpp": {
+                        "publisher": "ms-vscode",
+                        "name": "cpptools",
+                        "version": "1.19.8"
+                    }
+                }
+            }
+        }
+    },
+    "installations": {
+        "sequence": [
+            "powershell",
+            "git",
+            "vscode",
+            "task",
+            "dotnetTools"
+        ],
+        "packageTypes": {
+            "direct": {
+                "description": "Direct executable download",
+                "errorMessage": "Executable not found at: {0}"
+            },
+            "dotnet-tool": {
+                "description": ".NET Global Tool",
+                "installMethod": "dotnet tool install -g",
+                "errorMessage": "Failed to install .NET tool: {0}"
+            },
+            "self-extracting": {
+                "description": "Self-extracting archive",
+                "errorMessage": "Installer not found at: {0}"
+            },
+            "archive": {
+                "description": "ZIP/7Z archive",
+                "errorMessage": "Archive not found at: {0}"
+            }
+        }
+    },
+    "scripts": {
+        "initialization": {
+            "order": [
+                "Install-RequiredPackages"
+            ]
+        },
+        "functions": {
+            "Install-RequiredPackages": {
+                "description": "Installs all required packages from offline sources",
+                "errorMessages": {
+                    "packagesNotFound": "Package directory not found at: {0}"
+                }
+            }
+        }
+    }
+}

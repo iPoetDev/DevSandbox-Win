@@ -59,6 +59,24 @@ This document tracks both resolved and known issues in the Sandbox Development E
 - **Date**: 2024-01-09
 - **File**: `Start-DevSandbox.psm1`
 
+### Sandbox Configuration Path Issues
+- **Issue**: Invalid configuration settings (Error 0x80070057) when using direct D: drive paths
+- **Impact**: Windows Sandbox failed to launch with mapped folders
+- **Fix**: Changed drive paths to UNC format (\\localhost\D$\...) and added test folder mapping
+- **Date**: 2024-12-07
+
+### Mapped Folder Order Sensitivity
+- **Issue**: Sandbox configuration failed when Windows test folder mapping was removed
+- **Impact**: Configuration became invalid when changing folder mapping order
+- **Fix**: Maintained Windows test folder as first mapped folder for initialization
+- **Date**: 2024-12-07
+
+### UNC Path Requirements
+- **Issue**: Direct drive paths (D:\...) not supported for mapped folders
+- **Impact**: Configuration failed with drive letter paths
+- **Fix**: Converted all non-system drive paths to UNC format (\\localhost\D$\...)
+- **Date**: 2024-12-07
+
 ## Known Issues
 
 ### Package Version Management
@@ -109,7 +127,7 @@ This document tracks both resolved and known issues in the Sandbox Development E
 - **Issue**: Need to verify complete isolation of sandbox environment
 - **Impact**: Potential security implications if isolation is incomplete
 - **Status**: Ongoing Monitoring
-- **Current Controls**: 
+- **Current Controls**:
   - Read-only mappings where possible
   - Minimal system modification
   - Controlled execution policy
@@ -124,7 +142,7 @@ This document tracks both resolved and known issues in the Sandbox Development E
 - **Issue**: System-wide installation requires elevated privileges
 - **Impact**: Installation flexibility limited by user permissions
 - **Status**: By Design
-- **Current Controls**: 
+- **Current Controls**:
   - Default to user-level installation
   - Clear error messages for privilege requirements
   - Fallback to user installation when system install fails

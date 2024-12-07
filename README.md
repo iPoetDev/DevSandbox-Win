@@ -1,10 +1,12 @@
 # Windows Sandbox Development Environment
 
-A robust PowerShell-based system for creating isolated Windows Sandbox development environments with offline package management.
+A robust PowerShell-based system for creating isolated Windows Sandbox development environments with offline package
+management.
 
 ## Project Overview
 
-This project provides a robust, isolated development environment for PowerShell development and testing. It addresses several key challenges in PowerShell development:
+This project provides a robust, isolated development environment for PowerShell development and testing. It addresses
+several key challenges in PowerShell development:
 
 ### Why This is Needed
 
@@ -135,11 +137,70 @@ The environment is configured through `setup-manifest.json`, which controls:
 }
 ```
 
+## Sandbox Configuration (.wsb)
+
+### Path Mapping Guidelines
+
+1. **System Drive (C:) Mappings**
+   - Use direct paths for system drive: `C:\Windows` <sup>This is a critical hook/initialiser</sup>
+   - Always include a Windows test folder mapping for initialization
+   ```xml
+   <MappedFolder>
+       <HostFolder>C:\Windows</HostFolder>
+       <SandboxFolder>C:\Test</SandboxFolder>
+       <ReadOnly>true</ReadOnly>
+   </MappedFolder>
+   ```
+
+2. **Non-System Drive Mappings**
+   - Use UNC paths for all non-system drives: `\\localhost\D$\Path`
+   - Example for D: drive mapping:
+   ```xml
+   <MappedFolder>
+       <HostFolder>\\localhost\D$\Env\PSProfile\DevCode</HostFolder>
+       <SandboxFolder>C:\Users\WDAGUtilityAccount\Desktop\DevCode</SandboxFolder>
+       <ReadOnly>false</ReadOnly>
+   </MappedFolder>
+   ```
+
+3. **Folder Mapping Order**
+   - Keep Windows test folder as first mapping
+   - Order other mappings by importance/usage
+   - Use consistent SandboxFolder paths (preferably under Desktop)
+
+### Logon Command
+
+The logon command sets up the initial PowerShell environment:
+```xml
+<LogonCommand>
+    <Command>powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-Location C:\Users\WDAGUtilityAccount\Desktop\DevCode"</Command>
+</LogonCommand>
+```
+
+### Configuration Best Practices
+
+1. **Memory and GPU Settings**
+   ```xml
+   <MemoryInMB>8192</MemoryInMB>
+   <vGPU>Enable</vGPU>
+   <Networking>Enable</Networking>
+   ```
+
+2. **Read/Write Permissions**
+   - Set most mappings as read-only for security
+   - Only enable write access for development directories
+
+3. **Path Structure**
+   - Use Desktop location for easy access
+   - Maintain consistent path structure across configurations
+   - Follow principle of least privilege for permissions
+
 ## Installation
 
 ### Installing the Sandbox Module
 
-The sandbox environment can be installed either at the user level or system-wide, with three possible locations for user-level installation.
+The sandbox environment can be installed either at the user level or system-wide, with three possible locations for
+user-level installation.
 
 #### Installation Locations
 
